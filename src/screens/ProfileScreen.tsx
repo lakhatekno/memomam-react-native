@@ -65,8 +65,8 @@ export default function ProfileScreen() {
         </View>
 
         <View style={styles.mostEatenContainer}>
-            <Text style={styles.sectionTitle}>Paling Sering kamu makan:</Text>
-            <Text style={styles.mostEatenText}>{data.most_eaten}</Text>
+            <Text style={styles.sectionTitle}>Paling Sering Kamu Makan</Text>
+            <Text style={styles.mostEatenText}>{data.most_eaten} 😋</Text>
         </View>
 
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('NotificationSetting')}>
