@@ -19,7 +19,6 @@ import { useNavigation } from '@react-navigation/native';
 import * as Keychain from 'react-native-keychain';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-// Defined Colors
 const COLOR_DARK = '#18024E';
 const WHITE_BACKGROUND = '#FDFFFC';
 const BORDER_COLOR = '#E0E0E0';
@@ -31,14 +30,10 @@ const LoginScreen = () => {
     const [biometricEnabled, setBiometricEnabled] = useState(false);
     const navigation = useNavigation<any>();
 
-    // Check if credentials are saved in the keychain on mount
     useEffect(() => {
         const checkBiometricSupport = async () => {
             console.log("Checking for biometric support...");
             try {
-//                 const supported = await Keychain.canImplyAuthentication();
-//                 console.log("Biometrics supported by device:", supported);
-
                 const credentials = await Keychain.getGenericPassword();
                 console.log("Credentials exist in Keychain:", !!credentials);
 
@@ -62,9 +57,8 @@ const LoginScreen = () => {
             const token = response.data.data.token;
             await AsyncStorage.setItem('token', token);
 
-            // Ask to save credentials for biometric login
             const credentials = await Keychain.getGenericPassword();
-            if (!credentials) { // Only ask if not already saved
+            if (!credentials) {
                 Alert.alert(
                     "Enable Fingerprint Login",
                     "Would you like to use your fingerprint to log in next time?",
@@ -121,7 +115,7 @@ const LoginScreen = () => {
                 <ScrollView contentContainerStyle={styles.scrollContainer}>
                     <View style={styles.logoContainer}>
                         <Image
-                            source={require('../assets/images/logo.png')} // Make sure this path is correct
+                            source={require('../assets/images/logo.png')}
                             style={styles.logo}
                         />
                     </View>
@@ -171,6 +165,12 @@ const LoginScreen = () => {
                                 <Icon name="fingerprint" size={30} color={COLOR_DARK} />
                              </TouchableOpacity>
                         )}
+                    </View>
+                    <View style={styles.footer}>
+                        <Text style={styles.footerText}>Belum punya akun? </Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+                          <Text style={styles.linkText}>Buat akun</Text>
+                        </TouchableOpacity>
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
@@ -250,6 +250,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    footer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 24,
+    },
+    footerText: {
+        fontSize: 14,
+        color: '#666',
+    },
+    linkText: {
+        fontSize: 14,
+        color: COLOR_DARK,
+        fontWeight: 'bold',
+    }
 });
 
 export default LoginScreen;
