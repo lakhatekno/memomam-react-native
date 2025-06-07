@@ -28,24 +28,12 @@ const WHITE_BACKGROUND = '#FDFFFC';
 const BORDER_COLOR = '#E0E0E0';
 const ACCENT_COLOR = '#FDA2B1';
 
-// +++ NEW HELPER FUNCTION +++
-/**
- * Formats a string of numbers into hh:mm format automatically.
- * @param text The raw input string.
- * @returns A formatted time string.
- */
 const formatTimeInput = (text: string) => {
-  // Remove all non-digit characters
   const cleaned = text.replace(/\D/g, '');
-
-  // Limit to 4 digits (e.g., hhmm)
   const limited = cleaned.substring(0, 4);
-
-  // If more than 2 digits, automatically insert a colon
   if (limited.length > 2) {
     return `${limited.substring(0, 2)}:${limited.substring(2)}`;
   }
-
   return limited;
 };
 
@@ -103,7 +91,7 @@ export default function NotificationSettingScreen({ navigation }) {
 
       await AsyncStorage.setItem('mealTimes', JSON.stringify(mealTimes));
       await AsyncStorage.setItem('timezone', timezone.toString());
-      // await updateNotifications(mealTimes); // Assuming this function is correct
+      await updateNotifications(mealTimes);
 
       Alert.alert('Sukses', 'Pengingat makan telah diperbarui.');
       setIsEditMode(false);
@@ -120,9 +108,48 @@ export default function NotificationSettingScreen({ navigation }) {
       setIsEditMode(false);
   };
 
-  // +++ UPDATED FUNCTION +++
+  const updateNotifications = async (times: typeof defaultTimes) => {
+    await notifee.requestPermission();
+    const channelId = await notifee.createChannel({
+        id: 'default',
+        name: 'Default Channel',
+        importance: AndroidImportance.HIGH,
+    });
+    await notifee.cancelAllNotifications();
+    for (const [key, time] of Object.entries(times)) {
+        const [hour, minute] = time.split(':').map(Number);
+        const mealName = key;
+        const trigger_date = new Date();
+        trigger_date.setHours(hour);
+        trigger_date.setMinutes(minute);
+        trigger_date.setSeconds(0);
+        if (trigger_date.getTime() < Date.now()) {
+            trigger_date.setDate(trigger_date.getDate() + 1);
+        }
+
+        const notification_trigger: TimestampTrigger = {
+            type: TriggerType.TIMESTAMP,
+            timestamp: trigger_date.getTime(),
+            repeatFrequency: RepeatFrequency.DAILY,
+        }
+
+        await notifee.createTriggerNotification(
+            {
+                id: key,
+                title: `Waktunya ${mealName}!`,
+                body: 'Jangan lupa catat makananmu hari ini ya!',
+                android: {
+                    channelId,
+                },
+            },
+            notification_trigger
+        );
+
+        console.log(`Notifikasi untuk "${mealName}" berhasil dijadwalkan. Trigger pertama pada: ${trigger_date.toLocaleString()}`);
+    }
+  };
+
   const handleTimeChange = (key: string, text: string) => {
-    // Use the new formatter to ensure the format is always correct
     const formattedTime = formatTimeInput(text);
     setMealTimes(prev => ({ ...prev, [key]: formattedTime }));
   };
