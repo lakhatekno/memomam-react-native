@@ -6,8 +6,8 @@ import { MealHistoryPerDate, Meal } from '../interfaces/MealHistoryInterface';
 
 // Defined Colors
 const COLOR_DARK = '#18024E';
-const COLOR_DANGER = '#D9534F'; // A suitable color for delete actions
-const COLOR_EDIT = '#F0AD4E';   // A suitable color for edit actions
+const COLOR_DANGER = '#D9534F';
+const COLOR_EDIT = '#F0AD4E';
 
 type Props = {
     history: MealHistoryPerDate[];
@@ -56,12 +56,6 @@ const MealHistoryComponent: React.FC<Props> = ({ history, onDeleteMeal }) => {
             </View>
 
             <View style={styles.actionsContainer}>
-                <TouchableOpacity
-                    style={styles.iconButton}
-                    onPress={() => navigation.navigate('EditMeal', { mealId: meal.id })}
-                >
-                    <Icon name="pencil-outline" size={22} color={COLOR_EDIT} />
-                </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.iconButton}
                     onPress={() => handleDeletePress(meal)}
