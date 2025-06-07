@@ -19,22 +19,22 @@ const MainTabs = () => (
     }}
   >
     <Tab.Screen
-      name="Journal"
+      name="Catatan"
       component={JournalScreen}
       options={{ tabBarIcon: ({ color }) => (<Icon name="notebook" color={color} size={24} />) }}
     />
     <Tab.Screen
-      name="Explore"
+      name="Jelajahi"
       component={ExploreScreen}
       options={{ tabBarIcon: ({ color }) => (<Icon name="map-marker" color={color} size={24} />) }}
     />
     <Tab.Screen
-      name="Search"
+      name="Cari"
       component={SearchScreen}
       options={{ tabBarIcon: ({ color }) => (<Icon name="magnify" color={color} size={24} />) }}
     />
     <Tab.Screen
-      name="Profile"
+      name="Profil"
       component={ProfileStack}
       options={{ tabBarIcon: ({ color }) => (<Icon name="account" color={color} size={24} />) }}
     />
