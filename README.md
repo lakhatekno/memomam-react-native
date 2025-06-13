@@ -1,4 +1,5 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Demo Video  
+[Memomam V1 - Demo](https://youtu.be/2gd_FjWfPj0)
 
 # Getting Started
 
